@@ -45,7 +45,7 @@ while running:
                 dx = knife.rect.centerx - target.rect.centerx
                 dy = knife.rect.centery - target.rect.centery
                 angle = math.degrees(math.atan2(dy, dx))
-                knife.stick_angle = angle  # Corrected line
+                knife.stick_angle = angle
                 knife.stuck = True
                 score += 1
 
