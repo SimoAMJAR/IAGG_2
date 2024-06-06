@@ -8,7 +8,7 @@ class Knife(pygame.sprite.Sprite):
         super().__init__()
         # Load and resize the knife image
         self.original_image = pygame.image.load('knife.png').convert_alpha()
-        self.original_image = pygame.transform.scale(self.original_image, (50, 150))  # Adjust size if necessary
+        self.original_image = pygame.transform.scale(self.original_image, (100, 100))  # Adjust size if necessary
         self.image = self.original_image.copy()
         self.rect = self.image.get_rect()
         self.rect.center = (400, 550)
@@ -18,7 +18,7 @@ class Knife(pygame.sprite.Sprite):
         self.target = target
         self.angle = 0
         self.stick_angle = 0
-        self.stick_distance = 100  # Distance from the center of the circle
+        self.stick_distance = 50  # Distance from the center of the circle
 
     def update(self):
         if not self.stuck:
