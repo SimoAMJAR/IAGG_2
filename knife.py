@@ -18,6 +18,7 @@ class Knife(pygame.sprite.Sprite):
         self.target = target
         self.angle = 0
         self.stick_angle = 0
+        self.stick_distance = 100  # Distance from the center of the circle
 
     def update(self):
         if not self.stuck:
@@ -28,8 +29,8 @@ class Knife(pygame.sprite.Sprite):
             self.angle %= 360
 
             # Calculate knife position to ensure it stays fixed relative to the circle's center
-            self.rect.centerx = self.target.rect.centerx + radius * math.cos(math.radians(self.stick_angle + self.angle))
-            self.rect.centery = self.target.rect.centery + radius * math.sin(math.radians(self.stick_angle + self.angle))
+            self.rect.centerx = self.target.rect.centerx + self.stick_distance * math.cos(math.radians(self.stick_angle + self.angle))
+            self.rect.centery = self.target.rect.centery + self.stick_distance * math.sin(math.radians(self.stick_angle + self.angle))
 
             # Rotate the knife to always point towards the center of the circle
             rotation_angle = self.stick_angle + self.angle - 90
