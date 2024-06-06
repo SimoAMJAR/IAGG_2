@@ -1,10 +1,7 @@
-#knife.py
 import pygame
 import math
 
 BLACK = (0, 0, 0)
-WIDTH, HEIGHT = 800, 600
-
 
 class Knife(pygame.sprite.Sprite):
     def __init__(self, target):
@@ -13,7 +10,7 @@ class Knife(pygame.sprite.Sprite):
         self.original_image.fill(BLACK)
         self.image = self.original_image.copy()
         self.rect = self.image.get_rect()
-        self.rect.center = (WIDTH // 2, HEIGHT - 50)
+        self.rect.center = (400, 550)
         self.speed = 10
         self.stuck = False
         self.rotation_speed = 1  # Adjust rotation speed of the knife to match circle
@@ -33,9 +30,6 @@ class Knife(pygame.sprite.Sprite):
             self.rect.centery = self.target.rect.centery + radius * math.sin(math.radians(self.stick_angle + self.angle))
             # Resize the image to maintain the original size
             self.image = pygame.transform.scale(self.original_image, (self.rect.width, self.rect.height))
-
-    def draw(self, surface):
-        surface.blit(self.image, self.rect)
 
     def set_stick_angle(self, angle):
         self.stick_angle = angle

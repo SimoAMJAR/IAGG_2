@@ -1,15 +1,16 @@
 import pygame
 
 RED = (255, 0, 0)
+WIDTH, HEIGHT = 800, 600
 
-class Target(pygame.sprite.Sprite):
+class RotatingCircle(pygame.sprite.Sprite):
     def __init__(self):
         super().__init__()
         self.original_image = pygame.Surface((100, 100), pygame.SRCALPHA)
         pygame.draw.circle(self.original_image, RED, (50, 50), 50)
         self.image = self.original_image.copy()
         self.rect = self.image.get_rect()
-        self.rect.center = (400, 300)
+        self.rect.center = (WIDTH // 2, HEIGHT // 2)
         self.angle = 0
         self.rotation_speed = 1
 

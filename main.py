@@ -1,9 +1,8 @@
-#main.py
 import pygame
 import sys
 import math
 from knife import Knife
-from target import Target
+from rotating_circle import RotatingCircle
 
 # Initialize pygame
 pygame.init()
@@ -15,15 +14,14 @@ pygame.display.set_caption("Knife Hit Game")
 
 # Colors
 WHITE = (255, 255, 255)
-BLACK = (0, 0, 0)
 
 # Create sprite groups
 all_sprites = pygame.sprite.Group()
 targets = pygame.sprite.Group()
 
-# Create target sprite
-target = Target()
-targets.add(target)
+# Create rotating circle sprite
+rotating_circle = RotatingCircle()
+targets.add(rotating_circle)
 
 # Main game loop
 running = True
@@ -37,7 +35,7 @@ while running:
             running = False
         elif event.type == pygame.MOUSEBUTTONDOWN:
             if event.button == 1:
-                new_knife = Knife(target)
+                new_knife = Knife(rotating_circle)
                 all_sprites.add(new_knife)
 
     hits = pygame.sprite.groupcollide(targets, all_sprites, False, False)
@@ -58,7 +56,7 @@ while running:
     targets.draw(screen)
 
     font = pygame.font.Font(None, 36)
-    text = font.render("Score: " + str(score), True, BLACK)
+    text = font.render("Score: " + str(score), True, (0, 0, 0))
     screen.blit(text, (10, 10))
 
     pygame.display.flip()
