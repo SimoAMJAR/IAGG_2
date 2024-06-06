@@ -1,6 +1,7 @@
 import pygame
 import sys
 import random
+import math
 
 # Initialize pygame
 pygame.init()
@@ -17,7 +18,7 @@ RED = (255, 0, 0)
 
 # Define classes
 class Knife(pygame.sprite.Sprite):
-    def __init__(self):
+    def __init__(self, target):
         super().__init__()
         self.image = pygame.Surface((20, 40))
         self.image.fill(BLACK)
@@ -25,14 +26,27 @@ class Knife(pygame.sprite.Sprite):
         self.rect.center = (WIDTH // 2, HEIGHT - 50)
         self.speed = 10
         self.stuck = False
+        self.rotation_speed = 5
+        self.target = target
+        self.angle = 0
 
     def update(self):
         if not self.stuck:
             self.rect.y -= self.speed
+        else:
+            # Stick to the circumference of the circle
+            radius = self.target.rect.width / 2
+            self.angle += self.rotation_speed
+            self.rect.centerx = self.target.rect.centerx + radius * math.cos(math.radians(self.angle))
+            self.rect.centery = self.target.rect.centery + radius * math.sin(math.radians(self.angle))
 
     def draw(self, surface):
         if not self.stuck:
             surface.blit(self.image, self.rect)
+        else:
+            rotated_image = pygame.transform.rotate(self.image, -self.angle)
+            rotated_rect = rotated_image.get_rect(center=self.rect.center)
+            surface.blit(rotated_image, rotated_rect)
 
 class Target(pygame.sprite.Sprite):
     def __init__(self):
@@ -75,7 +89,7 @@ while running:
             running = False
         elif event.type == pygame.MOUSEBUTTONDOWN:
             if event.button == 1:
-                new_knife = Knife()  # Always create a new knife instance
+                new_knife = Knife(target)  # Pass the target instance
                 all_sprites.add(new_knife)
 
     hits = pygame.sprite.groupcollide(targets, all_sprites, False, False)
