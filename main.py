@@ -55,12 +55,10 @@ class Target(pygame.sprite.Sprite):
         surface.blit(self.image, self.rect)
 
 # Create sprites
-knife = Knife()
 target = Target()
 
 # Create sprite groups
 all_sprites = pygame.sprite.Group()
-all_sprites.add(knife)
 
 targets = pygame.sprite.Group()
 targets.add(target)
@@ -77,7 +75,7 @@ while running:
             running = False
         elif event.type == pygame.MOUSEBUTTONDOWN:
             if event.button == 1:
-                new_knife = Knife()
+                new_knife = Knife()  # Always create a new knife instance
                 all_sprites.add(new_knife)
 
     hits = pygame.sprite.groupcollide(targets, all_sprites, False, False)
