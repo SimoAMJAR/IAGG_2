@@ -20,15 +20,17 @@ RED = (255, 0, 0)
 class Knife(pygame.sprite.Sprite):
     def __init__(self, target):
         super().__init__()
-        self.image = pygame.Surface((20, 40))
-        self.image.fill(BLACK)
+        self.original_image = pygame.Surface((20, 40))
+        self.original_image.fill(BLACK)
+        self.image = self.original_image.copy()
         self.rect = self.image.get_rect()
         self.rect.center = (WIDTH // 2, HEIGHT - 50)
         self.speed = 10
         self.stuck = False
-        self.rotation_speed = 5
+        self.rotation_speed = 1  # Adjust rotation speed of the knife to match circle
         self.target = target
         self.angle = 0
+        self.stick_angle = 0  # Angle at which the knife sticks to the circle
 
     def update(self):
         if not self.stuck:
@@ -37,16 +39,17 @@ class Knife(pygame.sprite.Sprite):
             # Stick to the circumference of the circle
             radius = self.target.rect.width / 2
             self.angle += self.rotation_speed
-            self.rect.centerx = self.target.rect.centerx + radius * math.cos(math.radians(self.angle))
-            self.rect.centery = self.target.rect.centery + radius * math.sin(math.radians(self.angle))
+            self.angle %= 360
+            self.rect.centerx = self.target.rect.centerx + radius * math.cos(math.radians(self.stick_angle + self.angle))
+            self.rect.centery = self.target.rect.centery + radius * math.sin(math.radians(self.stick_angle + self.angle))
+            # Resize the image to maintain the original size
+            self.image = pygame.transform.scale(self.original_image, (self.rect.width, self.rect.height))
 
     def draw(self, surface):
-        if not self.stuck:
-            surface.blit(self.image, self.rect)
-        else:
-            rotated_image = pygame.transform.rotate(self.image, -self.angle)
-            rotated_rect = rotated_image.get_rect(center=self.rect.center)
-            surface.blit(rotated_image, rotated_rect)
+        surface.blit(self.image, self.rect)
+
+    def set_stick_angle(self, angle):
+        self.stick_angle = angle
 
 class Target(pygame.sprite.Sprite):
     def __init__(self):
@@ -57,7 +60,7 @@ class Target(pygame.sprite.Sprite):
         self.rect = self.image.get_rect()
         self.rect.center = (WIDTH // 2, HEIGHT // 2)
         self.angle = 0
-        self.rotation_speed = 2
+        self.rotation_speed = 1  # Adjust rotation speed of the circle
 
     def update(self):
         self.angle += self.rotation_speed
@@ -96,6 +99,11 @@ while running:
     for target, knives in hits.items():
         for knife in knives:
             if not knife.stuck:
+                # Calculate the angle between the knife and the center of the circle
+                dx = knife.rect.centerx - target.rect.centerx
+                dy = knife.rect.centery - target.rect.centery
+                angle = math.degrees(math.atan2(dy, dx))
+                knife.set_stick_angle(angle)
                 knife.stuck = True
                 score += 1
 
