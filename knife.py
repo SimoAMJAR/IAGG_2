@@ -27,11 +27,11 @@ class Knife(pygame.sprite.Sprite):
         if not self.stuck:
             self.rect.y -= self.speed
         else:
-            radius = self.target.rect.width / 2
-            self.angle += self.rotation_speed
+            # Update the angle of the knife relative to the wheel's rotation
+            self.angle -= self.target.rotation_speed  # Adjusted here
             self.angle %= 360
 
-            # Calculate knife position to ensure it stays fixed relative to the circle's center
+            # Calculate the new position of the knife on the wheel
             self.rect.centerx = self.target.rect.centerx + self.stick_distance * math.cos(math.radians(self.stick_angle + self.angle))
             self.rect.centery = self.target.rect.centery + self.stick_distance * math.sin(math.radians(self.stick_angle + self.angle))
 
@@ -39,6 +39,6 @@ class Knife(pygame.sprite.Sprite):
             rotation_angle = self.stick_angle + self.angle - 90
             self.image = pygame.transform.rotate(self.original_image, -rotation_angle)
             self.rect = self.image.get_rect(center=self.rect.center)
-            
+
             # Update the mask after rotation
             self.mask = pygame.mask.from_surface(self.image)
