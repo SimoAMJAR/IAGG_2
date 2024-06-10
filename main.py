@@ -38,10 +38,9 @@ while running:
                 new_knife = Knife(rotating_circle)
                 all_sprites.add(new_knife)
 
-    hits = pygame.sprite.groupcollide(targets, all_sprites, False, False)
-    for target, knives in hits.items():
-        for knife in knives:
-            if not knife.stuck:
+    for target in targets:
+        for knife in all_sprites:
+            if pygame.sprite.collide_mask(target, knife) and not knife.stuck:
                 dx = knife.rect.centerx - target.rect.centerx
                 dy = knife.rect.centery - target.rect.centery
                 angle = math.degrees(math.atan2(dy, dx))

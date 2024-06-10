@@ -6,7 +6,6 @@ BLACK = (0, 0, 0)
 class Knife(pygame.sprite.Sprite):
     def __init__(self, target):
         super().__init__()
-        # Load and resize the knife image
         self.original_image = pygame.image.load('knife.png').convert_alpha()
         self.original_image = pygame.transform.scale(self.original_image, (100, 100))  # Adjust size if necessary
         self.image = self.original_image.copy()
@@ -19,6 +18,9 @@ class Knife(pygame.sprite.Sprite):
         self.angle = 0
         self.stick_angle = 0
         self.stick_distance = 50  # Distance from the center of the circle
+        
+        # Create a mask for the knife image
+        self.mask = pygame.mask.from_surface(self.image)
 
     def update(self):
         if not self.stuck:
@@ -36,3 +38,6 @@ class Knife(pygame.sprite.Sprite):
             rotation_angle = self.stick_angle + self.angle - 90
             self.image = pygame.transform.rotate(self.original_image, -rotation_angle)
             self.rect = self.image.get_rect(center=self.rect.center)
+            
+            # Update the mask after rotation
+            self.mask = pygame.mask.from_surface(self.image)
