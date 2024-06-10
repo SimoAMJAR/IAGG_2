@@ -4,7 +4,7 @@ import math
 from knife import Knife
 from rotating_circle import RotatingCircle
 from game_over_screen import GameOverScreen
-from start_screen import StartScreen 
+from start_screen import StartScreen  # Import the new StartScreen class
 
 # Initialize pygame
 pygame.init()
@@ -30,6 +30,7 @@ def main():
     running = True
     score = 0
     game_over = False
+    game_over_timer = None
 
     # Display the start screen
     start_screen = StartScreen(screen)
@@ -41,19 +42,23 @@ def main():
         screen.fill(WHITE)
 
         if game_over:
-            game_over_screen = GameOverScreen(screen, score)
-            while game_over_screen.running:
-                game_over_screen.display()
-                game_over_screen.handle_events()
-            # Reset game state if restarted
-            if not game_over_screen.running:
-                running = True
-                game_over = False
-                score = 0
-                all_sprites.empty()
-                targets.empty()
-                rotating_circle = RotatingCircle()
-                targets.add(rotating_circle)
+            if game_over_timer is None:
+                game_over_timer = pygame.time.get_ticks()  # Start the timer
+            elif pygame.time.get_ticks() - game_over_timer >= 2000:  # Check if 2 seconds have passed
+                game_over_screen = GameOverScreen(screen, score)
+                while game_over_screen.running:
+                    game_over_screen.display()
+                    game_over_screen.handle_events()
+                # Reset game state if restarted
+                if not game_over_screen.running:
+                    running = True
+                    game_over = False
+                    game_over_timer = None
+                    score = 0
+                    all_sprites.empty()
+                    targets.empty()
+                    rotating_circle = RotatingCircle()
+                    targets.add(rotating_circle)
         else:
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
