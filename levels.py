@@ -11,7 +11,7 @@ class Levels:
     def __init__(self):
         self.current_level = 1
         self.levels = {
-            1: Level(1, 5, 1, 0),  # Level 1: 5 knives, rotation speed 1, 3 preplaced knives
+            1: Level(1, 5, 10, 0),  # Level 1: 5 knives, rotation speed 1, 3 preplaced knives
             2: Level(2, 6, 5, 2),  
             3: Level(3, 7, 1, 3),  
             4: Level(4, 7, 1, 4),  
