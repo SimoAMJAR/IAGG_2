@@ -4,7 +4,8 @@ import math
 from knife import Knife
 from rotating_circle import RotatingCircle
 from game_over_screen import GameOverScreen
-from start_screen import StartScreen  # Import the new StartScreen class
+from start_screen import StartScreen
+from levels import Levels
 
 # Initialize pygame
 pygame.init()
@@ -17,14 +18,34 @@ pygame.display.set_caption("Knife Hit Game")
 # Colors
 WHITE = (255, 255, 255)
 
-def main():
-    # Create sprite groups
+def preplace_knives(rotating_circle, knife_count):
+    knives = pygame.sprite.Group()
+    for i in range(knife_count):
+        angle = i * (360 // knife_count)
+        knife = Knife(rotating_circle)
+        knife.stuck = True
+        knife.stick_angle = angle
+        knife.rect.centerx = rotating_circle.rect.centerx + knife.stick_distance * math.cos(math.radians(angle))
+        knife.rect.centery = rotating_circle.rect.centery + knife.stick_distance * math.sin(math.radians(angle))
+        knives.add(knife)
+    return knives
+
+def initialize_level(levels):
+    current_level = levels.get_current_level()
     all_sprites = pygame.sprite.Group()
     targets = pygame.sprite.Group()
-
-    # Create rotating circle sprite
-    rotating_circle = RotatingCircle()
+    rotating_circle = RotatingCircle(current_level.rotation_speed)
     targets.add(rotating_circle)
+    preplaced_knives = preplace_knives(rotating_circle, current_level.preplaced_knives)
+    all_sprites.add(preplaced_knives)
+    return all_sprites, targets, current_level.knife_count, rotating_circle
+
+def main():
+    # Initialize levels
+    levels = Levels()
+    
+    # Initialize the first level
+    all_sprites, targets, knife_count, rotating_circle = initialize_level(levels)
 
     # Main game loop
     running = True
@@ -44,29 +65,27 @@ def main():
         if game_over:
             if game_over_timer is None:
                 game_over_timer = pygame.time.get_ticks()  # Start the timer
-            elif pygame.time.get_ticks() - game_over_timer >= 2000:  # Check if 2 seconds have passed
+            elif pygame.time.get_ticks() - game_over_timer >= 500:  # Check if 2 seconds have passed
                 game_over_screen = GameOverScreen(screen, score)
                 while game_over_screen.running:
                     game_over_screen.display()
                     game_over_screen.handle_events()
                 # Reset game state if restarted
                 if not game_over_screen.running:
-                    running = True
+                    levels.reset()
+                    all_sprites, targets, knife_count, rotating_circle = initialize_level(levels)
+                    score = 0
                     game_over = False
                     game_over_timer = None
-                    score = 0
-                    all_sprites.empty()
-                    targets.empty()
-                    rotating_circle = RotatingCircle()
-                    targets.add(rotating_circle)
         else:
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     running = False
                 elif event.type == pygame.MOUSEBUTTONDOWN:
-                    if event.button == 1:
+                    if event.button == 1 and knife_count > 0:
                         new_knife = Knife(rotating_circle)
                         all_sprites.add(new_knife)
+                        knife_count -= 1
 
             for knife in all_sprites:
                 if not knife.stuck:
@@ -91,11 +110,17 @@ def main():
             all_sprites.update()  # Update all sprites, including knives
             targets.update()
 
+            if knife_count == 0 and all(knife.stuck for knife in all_sprites):
+                if levels.advance_level():
+                    all_sprites, targets, knife_count, rotating_circle = initialize_level(levels)
+                else:
+                    game_over = True
+
         all_sprites.draw(screen)
         targets.draw(screen)
 
         font = pygame.font.Font(None, 36)
-        text = font.render("Score: " + str(score), True, (0, 0, 0))
+        text = font.render(f"Score: {score} | Level: {levels.current_level} | Knives Left: {knife_count}", True, (0, 0, 0))
         screen.blit(text, (10, 10))
 
         pygame.display.flip()
