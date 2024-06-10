@@ -3,6 +3,7 @@ import sys
 import math
 from knife import Knife
 from rotating_circle import RotatingCircle
+from game_over_screen import GameOverScreen 
 
 # Initialize pygame
 pygame.init()
@@ -31,15 +32,29 @@ game_over = False
 while running:
     screen.fill(WHITE)
 
-    for event in pygame.event.get():
-        if event.type == pygame.QUIT:
-            running = False
-        elif event.type == pygame.MOUSEBUTTONDOWN and not game_over:
-            if event.button == 1:
-                new_knife = Knife(rotating_circle)
-                all_sprites.add(new_knife)
+    if game_over:
+        game_over_screen = GameOverScreen(screen, score)
+        while game_over_screen.running:
+            game_over_screen.display()
+            game_over_screen.handle_events()
+        # Reset game state if restarted
+        if not game_over_screen.running:
+            running = True
+            game_over = False
+            score = 0
+            all_sprites.empty()
+            targets.empty()
+            rotating_circle = RotatingCircle()
+            targets.add(rotating_circle)
+    else:
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                running = False
+            elif event.type == pygame.MOUSEBUTTONDOWN:
+                if event.button == 1:
+                    new_knife = Knife(rotating_circle)
+                    all_sprites.add(new_knife)
 
-    if not game_over:
         for knife in all_sprites:
             if not knife.stuck:
                 # Check for collision with other knives
@@ -69,10 +84,6 @@ while running:
     font = pygame.font.Font(None, 36)
     text = font.render("Score: " + str(score), True, (0, 0, 0))
     screen.blit(text, (10, 10))
-
-    if game_over:
-        game_over_text = font.render("Game Over", True, (255, 0, 0))
-        screen.blit(game_over_text, (WIDTH // 2 - game_over_text.get_width() // 2, HEIGHT // 2 - game_over_text.get_height() // 2))
 
     pygame.display.flip()
     pygame.time.Clock().tick(60)
