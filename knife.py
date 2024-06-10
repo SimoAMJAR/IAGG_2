@@ -18,7 +18,7 @@ class Knife(pygame.sprite.Sprite):
         self.target = target
         self.angle = 0
         self.stick_angle = 0
-        self.stick_distance = 80  # Distance from the center of the circle
+        self.stick_distance = 90  # Distance from the center of the circle
         
         # Create a mask for the knife image
         self.mask = pygame.mask.from_surface(self.image)
