@@ -2,6 +2,7 @@ import pygame
 import math
 
 BLACK = (0, 0, 0)
+WIDTH, HEIGHT = 400, 700
 
 class Knife(pygame.sprite.Sprite):
     def __init__(self, target):
@@ -10,14 +11,14 @@ class Knife(pygame.sprite.Sprite):
         self.original_image = pygame.transform.scale(self.original_image, (100, 100))  # Adjust size if necessary
         self.image = self.original_image.copy()
         self.rect = self.image.get_rect()
-        self.rect.center = (400, 550)
+        self.rect.center = (WIDTH // 2, 550)
         self.speed = 10
         self.stuck = False
         self.rotation_speed = 1
         self.target = target
         self.angle = 0
         self.stick_angle = 0
-        self.stick_distance = 50  # Distance from the center of the circle
+        self.stick_distance = 80  # Distance from the center of the circle
         
         # Create a mask for the knife image
         self.mask = pygame.mask.from_surface(self.image)

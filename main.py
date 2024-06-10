@@ -11,7 +11,7 @@ from levels import Levels
 pygame.init()
 
 # Set up the screen
-WIDTH, HEIGHT = 800, 600
+WIDTH, HEIGHT = 400, 700  # Changed dimensions
 screen = pygame.display.set_mode((WIDTH, HEIGHT))
 pygame.display.set_caption("Knife Hit Game")
 
@@ -34,7 +34,7 @@ def initialize_level(levels):
     current_level = levels.get_current_level()
     all_sprites = pygame.sprite.Group()
     targets = pygame.sprite.Group()
-    rotating_circle = RotatingCircle(current_level.rotation_speed)
+    rotating_circle = RotatingCircle(current_level.rotation_speed)  
     targets.add(rotating_circle)
     preplaced_knives = preplace_knives(rotating_circle, current_level.preplaced_knives)
     all_sprites.add(preplaced_knives)
@@ -46,6 +46,10 @@ def main():
     
     # Initialize the first level
     all_sprites, targets, knife_count, rotating_circle = initialize_level(levels)
+
+    # Load knife image
+    knife_image = pygame.image.load('knife.png').convert_alpha()
+    knife_image = pygame.transform.scale(knife_image, (40, 40))  # Adjust size if necessary
 
     # Main game loop
     running = True
@@ -119,9 +123,17 @@ def main():
         all_sprites.draw(screen)
         targets.draw(screen)
 
+        # Display score and knife count
         font = pygame.font.Font(None, 36)
-        text = font.render(f"Score: {score} | Level: {levels.current_level} | Knives Left: {knife_count}", True, (0, 0, 0))
+        text = font.render(f"Score: {score}", True, (0, 0, 0))
         screen.blit(text, (10, 10))
+        text = font.render(f"Level: {levels.current_level}", True, (0, 0, 0))
+        screen.blit(text, (10, 50))
+
+        # Display remaining knives as small images
+        knife_spacing = 45  # Spacing between each knife image
+        for i in range(knife_count):
+            screen.blit(knife_image, (10, HEIGHT - 50 - i * knife_spacing))     
 
         pygame.display.flip()
         pygame.time.Clock().tick(60)
