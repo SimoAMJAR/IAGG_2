@@ -34,11 +34,12 @@ def initialize_level(levels):
     current_level = levels.get_current_level()
     all_sprites = pygame.sprite.Group()
     targets = pygame.sprite.Group()
-    rotating_circle = RotatingCircle(current_level.rotation_speed)  
+    rotating_circle = RotatingCircle(current_level.rotation_speed, current_level.direction)  # Pass direction here
     targets.add(rotating_circle)
     preplaced_knives = preplace_knives(rotating_circle, current_level.preplaced_knives)
     all_sprites.add(preplaced_knives)
     return all_sprites, targets, current_level.knife_count, rotating_circle
+
 
 def main():
     # Initialize levels

@@ -1,3 +1,5 @@
+# knife.py
+
 import pygame
 import math
 
@@ -8,19 +10,15 @@ class Knife(pygame.sprite.Sprite):
     def __init__(self, target):
         super().__init__()
         self.original_image = pygame.image.load('knife.png').convert_alpha()
-        #self.original_image = pygame.transform.scale(self.original_image, (100, 100))  # Adjust size if necessary
         self.image = self.original_image.copy()
         self.rect = self.image.get_rect()
         self.rect.center = (WIDTH // 2, 550)
         self.speed = 10
         self.stuck = False
-        self.rotation_speed = 1
         self.target = target
         self.angle = 0
         self.stick_angle = 0
         self.stick_distance = 90  # Distance from the center of the circle
-        
-        # Create a mask for the knife image
         self.mask = pygame.mask.from_surface(self.image)
 
     def update(self):
@@ -28,8 +26,10 @@ class Knife(pygame.sprite.Sprite):
             self.rect.y -= self.speed
             self.speed += 2  # Adjust this value as needed
         else:
-            # Update the angle of the knife relative to the wheel's rotation
-            self.angle -= self.target.rotation_speed  # Adjusted here
+            if self.target.direction == "right":
+                self.angle -= self.target.rotation_speed
+            else:
+                self.angle += self.target.rotation_speed
             self.angle %= 360
 
             # Calculate the new position of the knife on the wheel
