@@ -1,6 +1,7 @@
 import pygame
 import sys
 import math
+import os
 from knife import Knife
 from rotating_circle import RotatingCircle
 from game_over_screen import GameOverScreen
@@ -15,8 +16,23 @@ WIDTH, HEIGHT = 400, 700  # Changed dimensions
 screen = pygame.display.set_mode((WIDTH, HEIGHT))
 pygame.display.set_caption("Knife Hit Game")
 
+# Define the path to the high score file
+HIGH_SCORE_FILE = "high_score.txt"
+
 # Colors
 WHITE = (255, 255, 255)
+
+def load_high_score():
+    if os.path.exists(HIGH_SCORE_FILE):
+        with open(HIGH_SCORE_FILE, "r") as file:
+            return int(file.read())
+    else:
+        return 0
+
+# Add a function to save the high score to the file
+def save_high_score(score):
+    with open(HIGH_SCORE_FILE, "w") as file:
+        file.write(str(score))
 
 def preplace_knives(rotating_circle, knife_count):
     knives = pygame.sprite.Group()
@@ -44,6 +60,9 @@ def initialize_level(levels):
 def main():
     # Initialize levels
     levels = Levels()
+
+    # Load the high score
+    high_score = load_high_score()
     
     # Initialize the first level
     all_sprites, targets, knife_count, rotating_circle = initialize_level(levels)
@@ -71,7 +90,11 @@ def main():
             if game_over_timer is None:
                 game_over_timer = pygame.time.get_ticks()  # Start the timer
             elif pygame.time.get_ticks() - game_over_timer >= 500:  # Check if 2 seconds have passed
-                game_over_screen = GameOverScreen(screen, score)
+                # Check if the current score is higher than the high score
+                if score > high_score:
+                    high_score = score
+                    save_high_score(high_score)  # Save the new high score
+                game_over_screen = GameOverScreen(screen, score, high_score)
                 while game_over_screen.running:
                     game_over_screen.display()
                     game_over_screen.handle_events()
