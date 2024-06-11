@@ -26,7 +26,8 @@ class Knife(pygame.sprite.Sprite):
             self.rect.y -= self.speed
             self.speed += 2  # Adjust this value as needed
         else:
-            if self.target.direction == "right":
+            rotation_direction = self.target.get_rotation_direction()
+            if rotation_direction == "right":
                 self.angle -= self.target.rotation_speed
             else:
                 self.angle += self.target.rotation_speed

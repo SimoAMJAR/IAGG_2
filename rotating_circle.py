@@ -27,3 +27,6 @@ class RotatingCircle(pygame.sprite.Sprite):
 
     def draw(self, surface):
         surface.blit(self.image, self.rect)
+
+    def get_rotation_direction(self):
+        return self.direction
