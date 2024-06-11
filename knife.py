@@ -8,7 +8,7 @@ class Knife(pygame.sprite.Sprite):
     def __init__(self, target):
         super().__init__()
         self.original_image = pygame.image.load('knife.png').convert_alpha()
-        self.original_image = pygame.transform.scale(self.original_image, (100, 100))  # Adjust size if necessary
+        #self.original_image = pygame.transform.scale(self.original_image, (100, 100))  # Adjust size if necessary
         self.image = self.original_image.copy()
         self.rect = self.image.get_rect()
         self.rect.center = (WIDTH // 2, 550)
@@ -26,6 +26,7 @@ class Knife(pygame.sprite.Sprite):
     def update(self):
         if not self.stuck:
             self.rect.y -= self.speed
+            self.speed += 2  # Adjust this value as needed
         else:
             # Update the angle of the knife relative to the wheel's rotation
             self.angle -= self.target.rotation_speed  # Adjusted here
