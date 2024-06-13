@@ -69,7 +69,7 @@ def main():
 
     # Load and resize knife image
     knife_image = pygame.image.load('knife.png').convert_alpha()
-    knife_image = pygame.transform.scale(knife_image, (40, 40))  # Adjust size if necessary
+    knife_imagee = pygame.transform.scale(knife_image, (40, 40))  # Adjust size if necessary
 
     # Rect for the knife to be displayed at the bottom center
     knife_rect = knife_image.get_rect(midbottom=(WIDTH // 2, HEIGHT - 10))
@@ -175,7 +175,7 @@ def main():
         # Display remaining knives as small images
         knife_spacing = 45  # Spacing between each knife image
         for i in range(knife_count):
-            screen.blit(knife_image, (10, HEIGHT - 50 - i * knife_spacing))     
+            screen.blit(knife_imagee, (10, HEIGHT - 50 - i * knife_spacing))     
 
         pygame.display.flip()
         pygame.time.Clock().tick(60)
