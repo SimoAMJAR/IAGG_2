@@ -79,6 +79,16 @@ def main(biome):
     # Retrieve font from AssetManager
     font = asset_manager.get_font('IndieFlower-Regular.ttf')
 
+    # Retrieve specific fonts based on biome
+    if biome == 'desert':
+        font = asset_manager.get_font('Algerian.ttf')
+    elif biome == 'green':
+        font = asset_manager.get_font('VinerHandITC.ttf')
+    elif biome == 'ice':
+        font = asset_manager.get_font('HarlowSolidItalic.ttf')
+    elif biome == 'urban':
+        font = asset_manager.get_font('Impact.ttf')
+
     # Retrieve images from AssetManager
     background_image = asset_manager.get_image('background.jpg')
     knife_image = asset_manager.get_image('knife.png')

@@ -15,6 +15,22 @@ class AssetManager:
         # Load font
         self.load_font('IndieFlower-Regular.ttf', 36)
 
+        # Load fonts based on biome
+        self.load_fonts()
+
+    def load_fonts(self):
+        if self.biome == 'desert':
+            self.load_font('Algerian.ttf', 24)
+        elif self.biome == 'green':
+            self.load_font('VinerHandITC.ttf', 24)
+        elif self.biome == 'ice':
+            self.load_font('HarlowSolidItalic.ttf', 24)
+        elif self.biome == 'urban':
+            self.load_font('Impact.ttf', 24)
+        else:
+            # Default font if biome is not recognized
+            self.load_font('IndieFlower-Regular.ttf', 24)
+
     def load_image(self, name, size=None):
         fullname = os.path.join('images', self.biome, name)
         try:
