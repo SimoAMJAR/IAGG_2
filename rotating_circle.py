@@ -7,7 +7,7 @@ WIDTH, HEIGHT = 400, 700
 class RotatingCircle(pygame.sprite.Sprite):
     def __init__(self, rotation_speed, direction="right"):
         super().__init__()
-        self.original_image = pygame.image.load('wheel.png').convert_alpha()  # Load the image
+        self.original_image = pygame.image.load('images/wheel.png').convert_alpha()  # Load the image
         self.original_image = pygame.transform.scale(self.original_image, (200, 200))  # Adjust size if necessary
         self.image = self.original_image.copy()
         self.rect = self.image.get_rect()

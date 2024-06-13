@@ -16,6 +16,10 @@ WIDTH, HEIGHT = 400, 700  # Changed dimensions
 screen = pygame.display.set_mode((WIDTH, HEIGHT))
 pygame.display.set_caption("Knife Hit Game")
 
+# Load the background image and resize it to fit the screen
+background_image = pygame.image.load('images/background.jpg').convert_alpha()
+background_image = pygame.transform.scale(background_image, (WIDTH, HEIGHT))
+
 # Define the path to the high score file
 HIGH_SCORE_FILE = "high_score.txt"
 
@@ -68,8 +72,9 @@ def main():
     all_sprites, targets, knife_count, rotating_circle = initialize_level(levels)
 
     # Load and resize knife image
-    knife_image = pygame.image.load('knife.png').convert_alpha()
-    knife_imagee = pygame.transform.scale(knife_image, (40, 40))  # Adjust size if necessary
+    knife_image = pygame.image.load('images/knife.png').convert_alpha()
+    knife_image = pygame.transform.scale(knife_image, (40, 120))  # Adjust size if necessary
+    knife_imagee = pygame.transform.scale(knife_image, (20, 80))  # Adjust size if necessary
 
     # Rect for the knife to be displayed at the bottom center
     knife_rect = knife_image.get_rect(midbottom=(WIDTH // 2, HEIGHT - 10))
@@ -90,6 +95,9 @@ def main():
 
     while running:
         screen.fill(WHITE)
+
+        # Draw the background image
+        screen.blit(background_image, (0, 0))
 
         if game_over:
             if game_over_timer is None:
@@ -173,9 +181,9 @@ def main():
         screen.blit(text, (10, 50))
 
         # Display remaining knives as small images
-        knife_spacing = 45  # Spacing between each knife image
+        knife_spacing = 80  # Spacing between each knife image
         for i in range(knife_count):
-            screen.blit(knife_imagee, (10, HEIGHT - 50 - i * knife_spacing))     
+            screen.blit(knife_imagee, (5, HEIGHT - 90 - i * knife_spacing))     
 
         pygame.display.flip()
         pygame.time.Clock().tick(60)
