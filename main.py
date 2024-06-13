@@ -20,14 +20,6 @@ pygame.display.set_caption("Knife Hit Game")
 # Initialize AssetManager
 asset_manager = AssetManager()
 
-# Load images
-asset_manager.load_image('background.jpg', (WIDTH, HEIGHT))
-asset_manager.load_image('knife.png', (30, 120))
-asset_manager.load_image('wheel.png', (200, 200))
-
-# Load font
-asset_manager.load_font('IndieFlower-Regular.ttf', 36)
-
 # Font for the game (retrieved from AssetManager)
 font = asset_manager.get_font('IndieFlower-Regular.ttf')
 
@@ -85,7 +77,8 @@ def main():
     # Retrieve images from AssetManager
     background_image = asset_manager.get_image('background.jpg')
     knife_image = asset_manager.get_image('knife.png')
-    knife_imagee = pygame.transform.scale(knife_image, (20, 80))
+    small_knife_image = asset_manager.get_image('small_knife.png')
+
 
     # Rect for the knife to be displayed at the bottom center
     knife_rect = knife_image.get_rect(midbottom=(WIDTH // 2, HEIGHT - 10))
@@ -193,7 +186,7 @@ def main():
         # Display remaining knives as small images
         knife_spacing = 80  # Spacing between each knife image
         for i in range(knife_count):
-            screen.blit(knife_imagee, (5, HEIGHT - 90 - i * knife_spacing))     
+            screen.blit(small_knife_image, (5, HEIGHT - 90 - i * knife_spacing))
 
         pygame.display.flip()
         pygame.time.Clock().tick(60)

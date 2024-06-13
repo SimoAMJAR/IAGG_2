@@ -6,6 +6,15 @@ class AssetManager:
         self.images = {}
         self.fonts = {}
 
+        # Load images
+        self.load_image('background.jpg', (400, 700))  # Example size
+        self.load_image('knife.png', (30, 120))  # Example size
+        self.load_image('wheel.png', (200, 200))  # Example size
+        self.load_image('small_knife.png', (20, 80))  # Example size for small knife
+
+        # Load font
+        self.load_font('IndieFlower-Regular.ttf', 36)
+
     def load_image(self, name, size=None):
         fullname = os.path.join('images', name)
         try:
