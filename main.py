@@ -2,6 +2,7 @@ import pygame
 import sys
 import math
 import os
+from AssetManager import AssetManager
 from knife import Knife
 from rotating_circle import RotatingCircle
 from game_over_screen import GameOverScreen
@@ -16,9 +17,19 @@ WIDTH, HEIGHT = 400, 700  # Changed dimensions
 screen = pygame.display.set_mode((WIDTH, HEIGHT))
 pygame.display.set_caption("Knife Hit Game")
 
-# Load the background image and resize it to fit the screen
-background_image = pygame.image.load('images/background.jpg').convert_alpha()
-background_image = pygame.transform.scale(background_image, (WIDTH, HEIGHT))
+# Initialize AssetManager
+asset_manager = AssetManager()
+
+# Load images
+asset_manager.load_image('background.jpg', (WIDTH, HEIGHT))
+asset_manager.load_image('knife.png', (30, 120))
+asset_manager.load_image('wheel.png', (200, 200))
+
+# Load font
+asset_manager.load_font('IndieFlower-Regular.ttf', 36)
+
+# Font for the game (retrieved from AssetManager)
+font = asset_manager.get_font('IndieFlower-Regular.ttf')
 
 # Define the path to the high score file
 HIGH_SCORE_FILE = "high_score.txt"
@@ -71,10 +82,10 @@ def main():
     # Initialize the first level
     all_sprites, targets, knife_count, rotating_circle = initialize_level(levels)
 
-    # Load and resize knife image
-    knife_image = pygame.image.load('images/knife.png').convert_alpha()
-    knife_image = pygame.transform.scale(knife_image, (40, 120))  # Adjust size if necessary
-    knife_imagee = pygame.transform.scale(knife_image, (20, 80))  # Adjust size if necessary
+    # Retrieve images from AssetManager
+    background_image = asset_manager.get_image('background.jpg')
+    knife_image = asset_manager.get_image('knife.png')
+    knife_imagee = pygame.transform.scale(knife_image, (20, 80))
 
     # Rect for the knife to be displayed at the bottom center
     knife_rect = knife_image.get_rect(midbottom=(WIDTH // 2, HEIGHT - 10))
@@ -174,7 +185,6 @@ def main():
             screen.blit(knife_image, knife_rect)
 
         # Display score and knife count
-        font = pygame.font.Font(None, 36)
         text = font.render(f"Score: {score}", True, (0, 0, 0))
         screen.blit(text, (10, 10))
         text = font.render(f"Level: {levels.current_level}", True, (0, 0, 0))
