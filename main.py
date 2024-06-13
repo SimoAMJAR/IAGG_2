@@ -63,7 +63,6 @@ def initialize_level(levels, biome):
     all_sprites.add(preplaced_knives)
     return all_sprites, targets, current_level.knife_count, rotating_circle
 
-
 def main(biome):
     # Initialize levels
     levels = Levels()
@@ -125,12 +124,11 @@ def main(biome):
                     game_over_screen.display()
                     game_over_screen.handle_events()
                 # Reset game state if restarted
-                if not game_over_screen.running:
-                    levels.reset()
-                    all_sprites, targets, knife_count, rotating_circle = initialize_level(levels, biome)
-                    score = 0
-                    game_over = False
-                    game_over_timer = None
+                if game_over_screen.restart_game:
+                    return  # Return to main loop to restart the game
+                else:
+                    pygame.quit()
+                    sys.exit()
         else:
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
@@ -153,7 +151,6 @@ def main(biome):
 
             for knife in all_sprites:
                 if not knife.stuck:
-                    # Check for collision with other knives
                     hit_knives = pygame.sprite.spritecollide(knife, all_sprites, False, pygame.sprite.collide_mask)
                     for hit_knife in hit_knives:
                         if hit_knife != knife and hit_knife.stuck:
@@ -204,5 +201,17 @@ def main(biome):
     sys.exit()
 
 if __name__ == "__main__":
-    biome = "ice"  # You can change this to "ice" as needed
-    main(biome)
+    while True:
+        pygame.init()
+        screen = pygame.display.set_mode((WIDTH, HEIGHT))
+        pygame.display.set_caption("Knife Hit Game")
+
+        # Display the start screen and get the selected biome
+        start_screen = StartScreen(screen)
+        while start_screen.running:
+            start_screen.display()
+            start_screen.handle_events()
+
+        selected_biome = start_screen.selected_biome
+        if selected_biome:
+            main(selected_biome)
