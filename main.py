@@ -15,7 +15,7 @@ pygame.init()
 # Set up the screen
 WIDTH, HEIGHT = 400, 700  # Changed dimensions
 screen = pygame.display.set_mode((WIDTH, HEIGHT))
-pygame.display.set_caption("Knife Hit Game")
+pygame.display.set_caption("Knife Hit")
 
 # Initialize AssetManager
 asset_manager = None  # Will be initialized in main
@@ -231,7 +231,7 @@ if __name__ == "__main__":
     while True:
         pygame.init()
         screen = pygame.display.set_mode((WIDTH, HEIGHT))
-        pygame.display.set_caption("Knife Hit Game")
+        pygame.display.set_caption("Knife Hit")
 
         # Display the start screen and get the selected biome
         start_screen = StartScreen(screen)

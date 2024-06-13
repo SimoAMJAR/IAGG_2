@@ -15,8 +15,8 @@ class StartScreen:
         # Define button properties
         self.button_width = 150
         self.button_height = 50
-        self.button_color = (139, 69, 19)  # Brown color
-        self.button_hover_color = (160, 82, 45)  # Darker brown color
+        self.button_color = (255,228,181)  # Brown color 255,222,173
+        self.button_hover_color = (193,154,107)  # Darker brown color
         self.button_radius = 10  # Radius for rounded corners
 
         # Define positions
@@ -33,7 +33,7 @@ class StartScreen:
         self.screen.blit(self.background, (0, 0))
         
         # Render title text in black color
-        title_text = self.font_large.render("Knife Hit Game", True, pygame.Color(0, 0, 0))  # Black color
+        title_text = self.font_large.render("Knife Hit", True, pygame.Color(0, 0, 0))  # Black color
         self.screen.blit(title_text, (self.screen.get_width() // 2 - title_text.get_width() // 2, self.screen.get_height() // 3))
 
         mouse_pos = pygame.mouse.get_pos()
