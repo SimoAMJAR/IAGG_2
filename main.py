@@ -113,6 +113,10 @@ def main(biome):
         start_screen.display()
         start_screen.handle_events()
 
+    level_up_timer = None
+    display_level_up = False
+    vibrate_offset = 0  
+
     while running:
         screen.fill(WHITE)
 
@@ -180,6 +184,9 @@ def main(biome):
 
             if knife_count == 0 and all(knife.stuck for knife in all_sprites):
                 if levels.advance_level():
+                    display_level_up = True
+                    level_up_timer = pygame.time.get_ticks()  # Start the timer
+                    vibrate_offset = 0  # Reset vibration offset
                     all_sprites, targets, knife_count, rotating_circle = initialize_level(levels, biome)
                 else:
                     game_over = True
@@ -191,11 +198,23 @@ def main(biome):
         if not knife_in_motion and knife_count > 0:
             screen.blit(knife_image, knife_rect)
 
+        if display_level_up:
+            # Calculate vibration effect
+            vibrate_amplitude = 5  # Amplitude of vibration
+            vibrate_offset = vibrate_amplitude * math.sin(pygame.time.get_ticks() / 50)  # Adjust speed of vibration
+
+            # Render level number with vibration effect
+            level_text = font.render(f"Level: {levels.current_level}", True, (0, 0, 0))
+            text_rect = level_text.get_rect(center=(WIDTH // 2 + vibrate_offset, HEIGHT // 2))
+            screen.blit(level_text, text_rect)
+
+            # Check if 3 seconds have passed
+            if pygame.time.get_ticks() - level_up_timer >= 500:
+                display_level_up = False
+
         # Display score and knife count
         text = font.render(f"Score: {score}", True, (0, 0, 0))
         screen.blit(text, (10, 10))
-        text = font.render(f"Level: {levels.current_level}", True, (0, 0, 0))
-        screen.blit(text, (10, 50))
 
         # Display remaining knives as small images
         knife_spacing = 80  # Spacing between each knife image
