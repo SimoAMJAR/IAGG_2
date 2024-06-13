@@ -67,15 +67,20 @@ def main():
     # Initialize the first level
     all_sprites, targets, knife_count, rotating_circle = initialize_level(levels)
 
-    # Load knife image
+    # Load and resize knife image
     knife_image = pygame.image.load('knife.png').convert_alpha()
     knife_image = pygame.transform.scale(knife_image, (40, 40))  # Adjust size if necessary
+
+    # Rect for the knife to be displayed at the bottom center
+    knife_rect = knife_image.get_rect(midbottom=(WIDTH // 2, HEIGHT - 10))
 
     # Main game loop
     running = True
     score = 0
     game_over = False
     game_over_timer = None
+    knife_in_motion = False
+    current_knife = None
 
     # Display the start screen
     start_screen = StartScreen(screen)
@@ -110,10 +115,20 @@ def main():
                 if event.type == pygame.QUIT:
                     running = False
                 elif event.type == pygame.MOUSEBUTTONDOWN:
-                    if event.button == 1 and knife_count > 0:
-                        new_knife = Knife(rotating_circle)
-                        all_sprites.add(new_knife)
+                    if event.button == 1 and knife_count > 0 and not knife_in_motion:
+                        knife_in_motion = True
+                        current_knife = Knife(rotating_circle)
+                        all_sprites.add(current_knife)
                         knife_count -= 1
+
+            if knife_in_motion and current_knife is not None:
+                current_knife.update()
+                if current_knife.rect.top < 0 or current_knife.stuck:
+                    knife_in_motion = False
+                    if current_knife.stuck:
+                        score += 1
+                    else:
+                        game_over = True
 
             for knife in all_sprites:
                 if not knife.stuck:
@@ -133,7 +148,6 @@ def main():
                         angle = math.degrees(math.atan2(dy, dx))
                         knife.stick_angle = angle
                         knife.stuck = True
-                        score += 1
 
             all_sprites.update()  # Update all sprites, including knives
             targets.update()
@@ -146,6 +160,10 @@ def main():
 
         all_sprites.draw(screen)
         targets.draw(screen)
+
+        # Draw the knife at the bottom center if it's not in motion
+        if not knife_in_motion and knife_count > 0:
+            screen.blit(knife_image, knife_rect)
 
         # Display score and knife count
         font = pygame.font.Font(None, 36)
