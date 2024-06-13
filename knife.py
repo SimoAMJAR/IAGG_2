@@ -1,19 +1,16 @@
-# knife.py
-
 import pygame
 import math
-
-BLACK = (0, 0, 0)
-WIDTH, HEIGHT = 400, 700
+import os
 
 class Knife(pygame.sprite.Sprite):
-    def __init__(self, target):
+    def __init__(self, target, biome):
         super().__init__()
-        self.original_image = pygame.image.load('images/knife.png').convert_alpha()
+        self.biome = biome
+        self.original_image = pygame.image.load(os.path.join('images', self.biome, 'knife.png')).convert_alpha()
         self.original_image = pygame.transform.scale(self.original_image, (30, 120))  # Adjust size if necessary
         self.image = self.original_image.copy()
         self.rect = self.image.get_rect()
-        self.rect.center = (WIDTH // 2, 550)
+        self.rect.center = (400 // 2, 550)
         self.speed = 10
         self.stuck = False
         self.target = target

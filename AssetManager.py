@@ -2,21 +2,21 @@ import pygame
 import os
 
 class AssetManager:
-    def __init__(self):
+    def __init__(self, biome):
         self.images = {}
         self.fonts = {}
+        self.biome = biome
 
-        # Load images
-        self.load_image('background.jpg', (400, 700))  # Example size
-        self.load_image('knife.png', (30, 120))  # Example size
-        self.load_image('wheel.png', (200, 200))  # Example size
-        self.load_image('small_knife.png', (20, 80))  # Example size for small knife
+        # Load images based on biome
+        self.load_image('background.jpg', (400, 700))
+        self.load_image('knife.png', (30, 120))
+        self.load_image('small_knife.png', (20, 80))
 
         # Load font
         self.load_font('IndieFlower-Regular.ttf', 36)
 
     def load_image(self, name, size=None):
-        fullname = os.path.join('images', name)
+        fullname = os.path.join('images', self.biome, name)
         try:
             image = pygame.image.load(fullname).convert_alpha()
             if size:

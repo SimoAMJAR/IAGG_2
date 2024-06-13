@@ -18,10 +18,10 @@ screen = pygame.display.set_mode((WIDTH, HEIGHT))
 pygame.display.set_caption("Knife Hit Game")
 
 # Initialize AssetManager
-asset_manager = AssetManager()
+asset_manager = None  # Will be initialized in main
 
 # Font for the game (retrieved from AssetManager)
-font = asset_manager.get_font('IndieFlower-Regular.ttf')
+font = None  # Will be initialized in main
 
 # Define the path to the high score file
 HIGH_SCORE_FILE = "high_score.txt"
@@ -41,11 +41,11 @@ def save_high_score(score):
     with open(HIGH_SCORE_FILE, "w") as file:
         file.write(str(score))
 
-def preplace_knives(rotating_circle, knife_count):
+def preplace_knives(rotating_circle, biome, knife_count):
     knives = pygame.sprite.Group()
     for i in range(knife_count):
         angle = i * (360 // knife_count)
-        knife = Knife(rotating_circle)
+        knife = Knife(rotating_circle, biome)  # Provide biome argument here
         knife.stuck = True
         knife.stick_angle = angle
         knife.rect.centerx = rotating_circle.rect.centerx + knife.stick_distance * math.cos(math.radians(angle))
@@ -53,18 +53,18 @@ def preplace_knives(rotating_circle, knife_count):
         knives.add(knife)
     return knives
 
-def initialize_level(levels):
+def initialize_level(levels, biome):
     current_level = levels.get_current_level()
     all_sprites = pygame.sprite.Group()
     targets = pygame.sprite.Group()
-    rotating_circle = RotatingCircle(current_level.rotation_speed, current_level.direction)  # Pass direction here
+    rotating_circle = RotatingCircle(current_level.rotation_speed, current_level.direction)
     targets.add(rotating_circle)
-    preplaced_knives = preplace_knives(rotating_circle, current_level.preplaced_knives)
+    preplaced_knives = preplace_knives(rotating_circle, biome, current_level.preplaced_knives)
     all_sprites.add(preplaced_knives)
     return all_sprites, targets, current_level.knife_count, rotating_circle
 
 
-def main():
+def main(biome):
     # Initialize levels
     levels = Levels()
 
@@ -72,13 +72,22 @@ def main():
     high_score = load_high_score()
     
     # Initialize the first level
-    all_sprites, targets, knife_count, rotating_circle = initialize_level(levels)
+    all_sprites, targets, knife_count, rotating_circle = initialize_level(levels, biome)
+
+    # Initialize AssetManager with selected biome
+    asset_manager = AssetManager(biome)
+
+    # Retrieve font from AssetManager
+    font = asset_manager.get_font('IndieFlower-Regular.ttf')
+
+    # Ensure font is loaded correctly
+    if font is None:
+        raise RuntimeError("Font not loaded correctly")
 
     # Retrieve images from AssetManager
     background_image = asset_manager.get_image('background.jpg')
     knife_image = asset_manager.get_image('knife.png')
     small_knife_image = asset_manager.get_image('small_knife.png')
-
 
     # Rect for the knife to be displayed at the bottom center
     knife_rect = knife_image.get_rect(midbottom=(WIDTH // 2, HEIGHT - 10))
@@ -118,7 +127,7 @@ def main():
                 # Reset game state if restarted
                 if not game_over_screen.running:
                     levels.reset()
-                    all_sprites, targets, knife_count, rotating_circle = initialize_level(levels)
+                    all_sprites, targets, knife_count, rotating_circle = initialize_level(levels, biome)
                     score = 0
                     game_over = False
                     game_over_timer = None
@@ -129,7 +138,7 @@ def main():
                 elif event.type == pygame.MOUSEBUTTONDOWN:
                     if event.button == 1 and knife_count > 0 and not knife_in_motion:
                         knife_in_motion = True
-                        current_knife = Knife(rotating_circle)
+                        current_knife = Knife(rotating_circle, biome)
                         all_sprites.add(current_knife)
                         knife_count -= 1
 
@@ -166,7 +175,7 @@ def main():
 
             if knife_count == 0 and all(knife.stuck for knife in all_sprites):
                 if levels.advance_level():
-                    all_sprites, targets, knife_count, rotating_circle = initialize_level(levels)
+                    all_sprites, targets, knife_count, rotating_circle = initialize_level(levels, biome)
                 else:
                     game_over = True
 
@@ -195,4 +204,5 @@ def main():
     sys.exit()
 
 if __name__ == "__main__":
-    main()
+    biome = "ice"  # You can change this to "ice" as needed
+    main(biome)
