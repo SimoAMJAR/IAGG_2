@@ -57,7 +57,7 @@ def initialize_level(levels, biome):
     current_level = levels.get_current_level()
     all_sprites = pygame.sprite.Group()
     targets = pygame.sprite.Group()
-    rotating_circle = RotatingCircle(current_level.rotation_speed, current_level.direction)
+    rotating_circle = RotatingCircle(current_level.rotation_speed, biome, current_level.direction)  # Pass biome here
     targets.add(rotating_circle)
     preplaced_knives = preplace_knives(rotating_circle, biome, current_level.preplaced_knives)
     all_sprites.add(preplaced_knives)

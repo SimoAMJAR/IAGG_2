@@ -1,20 +1,30 @@
-# rotating_circle.py
-
 import pygame
+import os
 
 WIDTH, HEIGHT = 400, 700
 
 class RotatingCircle(pygame.sprite.Sprite):
-    def __init__(self, rotation_speed, direction="right"):
+    def __init__(self, rotation_speed, biome, direction="right"):
         super().__init__()
-        self.original_image = pygame.image.load('images/wheel.png').convert_alpha()  # Load the image
-        self.original_image = pygame.transform.scale(self.original_image, (200, 200))  # Adjust size if necessary
-        self.image = self.original_image.copy()
+        self.biome = biome
+        self.rotation_speed = rotation_speed
+        self.direction = direction
+        self.load_image()
+
         self.rect = self.image.get_rect()
         self.rect.center = (WIDTH // 2, HEIGHT // 2 - 100)
         self.angle = 0
-        self.rotation_speed = rotation_speed
-        self.direction = direction
+
+    def load_image(self):
+        filename = 'wheel.png'
+        fullname = os.path.join('images', self.biome, filename)
+        try:
+            self.original_image = pygame.image.load(fullname).convert_alpha()
+            self.original_image = pygame.transform.scale(self.original_image, (200, 200))  # Adjust size if necessary
+            self.image = self.original_image.copy()
+        except pygame.error as e:
+            print(f"Cannot load image: {fullname}")
+            raise SystemExit(e)
 
     def update(self):
         if self.direction == "right":
