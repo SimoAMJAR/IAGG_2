@@ -99,6 +99,8 @@ def main(biome):
     knife_in_motion = False
     current_knife = None
 
+    background = pygame.image.load('images/background.png').convert()
+
     # Display the start screen
     start_screen = StartScreen(screen)
     while start_screen.running:
@@ -119,7 +121,7 @@ def main(biome):
                 if score > high_score:
                     high_score = score
                     save_high_score(high_score)  # Save the new high score
-                game_over_screen = GameOverScreen(screen, score, high_score)
+                game_over_screen = GameOverScreen(screen, background ,score, high_score)
                 while game_over_screen.running:
                     game_over_screen.display()
                     game_over_screen.handle_events()
