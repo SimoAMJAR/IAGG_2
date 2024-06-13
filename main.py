@@ -79,10 +79,6 @@ def main(biome):
     # Retrieve font from AssetManager
     font = asset_manager.get_font('IndieFlower-Regular.ttf')
 
-    # Ensure font is loaded correctly
-    if font is None:
-        raise RuntimeError("Font not loaded correctly")
-
     # Retrieve images from AssetManager
     background_image = asset_manager.get_image('background.jpg')
     knife_image = asset_manager.get_image('knife.png')

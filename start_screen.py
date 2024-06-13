@@ -20,9 +20,12 @@ class StartScreen:
         self.button_radius = 10  # Radius for rounded corners
 
         # Define positions
+        button_y = screen.get_height() // 2
         self.buttons = {
-            "Ice": pygame.Rect((screen.get_width() // 4 - self.button_width // 2, screen.get_height() // 2), (self.button_width, self.button_height)),
-            "Green": pygame.Rect((3 * screen.get_width() // 4 - self.button_width // 2, screen.get_height() // 2), (self.button_width, self.button_height))
+            "Ice": pygame.Rect((screen.get_width() // 4 - self.button_width // 2, button_y), (self.button_width, self.button_height)),
+            "Green": pygame.Rect((3 * screen.get_width() // 4 - self.button_width // 2, button_y), (self.button_width, self.button_height)),
+            "Desert": pygame.Rect((screen.get_width() // 4 - self.button_width // 2, button_y + 100), (self.button_width, self.button_height)),
+            "Urban": pygame.Rect((3 * screen.get_width() // 4 - self.button_width // 2, button_y + 100), (self.button_width, self.button_height))
         }
 
     def display(self):
