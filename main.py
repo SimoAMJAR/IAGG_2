@@ -113,6 +113,8 @@ def main(biome):
     throw_sound.set_volume(0.5)
     hit_sound.set_volume(0.5)
 
+    pygame.mixer.music.load('music/intro.mp3')
+
     level_up_timer = None
     display_level_up = False
     vibrate_offset = 0  
@@ -124,6 +126,7 @@ def main(biome):
         screen.blit(background_image, (0, 0))
 
         if game_over:
+            pygame.mixer.music.play(-1)
             if game_over_timer is None:
                 game_over_timer = pygame.time.get_ticks()  # Start the timer
             elif pygame.time.get_ticks() - game_over_timer >= 500:  # Check if 2 seconds have passed
@@ -137,6 +140,7 @@ def main(biome):
                     game_over_screen.handle_events()
                 # Reset game state if restarted
                 if game_over_screen.restart_game:
+                    pygame.mixer.music.stop()
                     return  # Return to main loop to restart the game
                 else:
                     pygame.quit()

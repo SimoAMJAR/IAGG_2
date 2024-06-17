@@ -28,6 +28,11 @@ class StartScreen:
             "Urban": pygame.Rect((3 * screen.get_width() // 4 - self.button_width // 2, button_y + 100), (self.button_width, self.button_height))
         }
 
+        # Load and play intro music
+        pygame.mixer.music.load('music/intro.mp3')
+        pygame.mixer.music.play(-1)  # -1 means loop indefinitely
+        pygame.mixer.music.set_volume(0.5)  
+        
     def display(self):
         # Draw background
         self.screen.blit(self.background, (0, 0))
@@ -62,3 +67,4 @@ class StartScreen:
                     if rect.collidepoint(event.pos):
                         self.selected_biome = biome.lower()
                         self.running = False
+                        pygame.mixer.music.stop()  # Stop intro music when selecting biome
