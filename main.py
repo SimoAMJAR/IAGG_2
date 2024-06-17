@@ -113,7 +113,7 @@ def main(biome):
     throw_sound.set_volume(0.5)
     hit_sound.set_volume(0.5)
 
-    pygame.mixer.music.load('music/intro.mp3')
+    pygame.mixer.music.load('music/intro1.mp3')
 
     level_up_timer = None
     display_level_up = False
