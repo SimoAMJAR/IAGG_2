@@ -107,6 +107,11 @@ def main(biome):
 
     background = pygame.image.load('images/background.png').convert()
 
+    # Load sound effect
+    throw_sound = pygame.mixer.Sound('music/knife_throw.mp3')
+    hit_sound = pygame.mixer.Sound('music/knife_hit.mp3')
+    throw_sound.set_volume(0.5)
+    hit_sound.set_volume(0.5)
 
     level_up_timer = None
     display_level_up = False
@@ -146,6 +151,8 @@ def main(biome):
                         current_knife = Knife(rotating_circle, biome)
                         all_sprites.add(current_knife)
                         knife_count -= 1
+                        # Play the sound effect
+                        throw_sound.play()
 
             if knife_in_motion and current_knife is not None:
                 current_knife.update()
@@ -162,6 +169,7 @@ def main(biome):
                     for hit_knife in hit_knives:
                         if hit_knife != knife and hit_knife.stuck:
                             game_over = True
+                            hit_sound.play()
                             break
 
             hits = pygame.sprite.groupcollide(targets, all_sprites, False, False, pygame.sprite.collide_mask)
