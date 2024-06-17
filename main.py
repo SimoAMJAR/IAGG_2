@@ -113,11 +113,13 @@ def main(biome):
     throw_sound.set_volume(0.5)
     hit_sound.set_volume(0.5)
 
-    pygame.mixer.music.load('music/intro1.mp3')
+    pygame.mixer.music.load('music/gameplay.mp3')  # Load gameplay background music
 
     level_up_timer = None
     display_level_up = False
     vibrate_offset = 0  
+
+    pygame.mixer.music.play(-1)  # Play the gameplay music in a loop
 
     while running:
         screen.fill(WHITE)
@@ -126,10 +128,11 @@ def main(biome):
         screen.blit(background_image, (0, 0))
 
         if game_over:
-            pygame.mixer.music.play(-1)
+            pygame.mixer.music.load('music/gameover.mp3')
+            pygame.mixer.music.play(-1)  # Play game over music in a loop
             if game_over_timer is None:
                 game_over_timer = pygame.time.get_ticks()  # Start the timer
-            elif pygame.time.get_ticks() - game_over_timer >= 500:  # Check if 2 seconds have passed
+            elif pygame.time.get_ticks() - game_over_timer >= 500:  # Check if 0.5 seconds have passed
                 # Check if the current score is higher than the high score
                 if score > high_score:
                     high_score = score
