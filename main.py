@@ -107,11 +107,6 @@ def main(biome):
 
     background = pygame.image.load('images/background.png').convert()
 
-    # Display the start screen
-    start_screen = StartScreen(screen)
-    while start_screen.running:
-        start_screen.display()
-        start_screen.handle_events()
 
     level_up_timer = None
     display_level_up = False
@@ -229,10 +224,6 @@ def main(biome):
 
 if __name__ == "__main__":
     while True:
-        pygame.init()
-        screen = pygame.display.set_mode((WIDTH, HEIGHT))
-        pygame.display.set_caption("Knife Hit")
-
         # Display the start screen and get the selected biome
         start_screen = StartScreen(screen)
         while start_screen.running:
