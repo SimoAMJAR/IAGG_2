@@ -6,14 +6,14 @@ class Level:
         self.knife_count = knife_count
         self.rotation_speed = rotation_speed
         self.preplaced_knives = preplaced_knives
-        self.direction = direction  # New parameter for rotation direction
+        self.direction = direction
 
 class Levels:
     def __init__(self):
         self.current_level = 1
         self.levels = {
             1: Level(1, 5, 3, 0, "right"),  # Level 1: 5 knives, rotation speed 1, 3 preplaced knives, right direction
-            2: Level(2, 5, 3, 2, "left"),   # Example with left direction
+            2: Level(2, 5, 3, 2, "left"),
             3: Level(3, 7, 5, 0, "right"), 
             4: Level(4, 5, 5, 3, "left"), 
             5: Level(5, 7, 5, 3, "right"), 

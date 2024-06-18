@@ -1,4 +1,3 @@
-import sys
 import pygame
 
 class StartScreen:
@@ -9,17 +8,14 @@ class StartScreen:
         self.running = True
         self.selected_biome = None
         
-        # Load background image
         self.background = pygame.image.load('images/background.png').convert()
 
-        # Define button properties
         self.button_width = 150
         self.button_height = 50
-        self.button_color = (255, 228, 181)  # Brown color
-        self.button_hover_color = (193, 154, 107)  # Darker brown color
-        self.button_radius = 10  # Radius for rounded corners
+        self.button_color = (255, 228, 181)
+        self.button_hover_color = (193, 154, 107)
+        self.button_radius = 10
 
-        # Define positions
         button_y = screen.get_height() // 2
         self.buttons = {
             "Ice": pygame.Rect((screen.get_width() // 4 - self.button_width // 2, button_y), (self.button_width, self.button_height)),
@@ -28,21 +24,17 @@ class StartScreen:
             "Urban": pygame.Rect((3 * screen.get_width() // 4 - self.button_width // 2, button_y + 100), (self.button_width, self.button_height))
         }
 
-        # Load and play intro music
         pygame.mixer.music.load('music/intro.mp3')
-        pygame.mixer.music.play(-1)  # -1 means loop indefinitely
+        pygame.mixer.music.play(-1) 
         pygame.mixer.music.set_volume(0.5)  
 
     def display(self):
-        # Draw background
         self.screen.blit(self.background, (0, 0))
         
-        # Render title text in the center of the screen
-        title_text = self.font_large.render("KNIFE TARGET", True, (255, 255, 255))
+        title_text = self.font_large.render("KNIFE TARGET", True, (0, 0, 0))
         title_rect = title_text.get_rect(center=(self.screen.get_width() // 2, self.screen.get_height() // 4))
         self.screen.blit(title_text, title_rect)
 
-        # Render buttons with rounded corners and text
         mouse_pos = pygame.mouse.get_pos()
         for biome, rect in self.buttons.items():
             if rect.collidepoint(mouse_pos):
@@ -60,10 +52,10 @@ class StartScreen:
             if event.type == pygame.QUIT:
                 self.running = False
             elif event.type == pygame.MOUSEBUTTONDOWN:
-                if event.button == 1:  # Left mouse button
+                if event.button == 1:
                     mouse_pos = pygame.mouse.get_pos()
                     for biome, rect in self.buttons.items():
                         if rect.collidepoint(mouse_pos):
-                            pygame.mixer.music.stop()  # Stop the intro music
+                            pygame.mixer.music.stop()
                             self.selected_biome = biome.lower()
                             self.running = False

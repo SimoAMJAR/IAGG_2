@@ -7,15 +7,12 @@ class AssetManager:
         self.fonts = {}
         self.biome = biome
 
-        # Load images based on biome
         self.load_image('background.jpg', (400, 700))
         self.load_image('knife.png', (30, 120))
         self.load_image('small_knife.png', (20, 80))
 
-        # Load font
         self.load_font('IndieFlower-Regular.ttf', 36)
 
-        # Load fonts based on biome
         self.load_fonts()
 
     def load_fonts(self):
@@ -28,7 +25,6 @@ class AssetManager:
         elif self.biome == 'urban':
             self.load_font('Impact.ttf', 24)
         else:
-            # Default font if biome is not recognized
             self.load_font('IndieFlower-Regular.ttf', 24)
 
     def load_image(self, name, size=None):

@@ -20,7 +20,7 @@ class RotatingCircle(pygame.sprite.Sprite):
         fullname = os.path.join('images', self.biome, filename)
         try:
             self.original_image = pygame.image.load(fullname).convert_alpha()
-            self.original_image = pygame.transform.scale(self.original_image, (200, 200))  # Adjust size if necessary
+            self.original_image = pygame.transform.scale(self.original_image, (200, 200))
             self.image = self.original_image.copy()
         except pygame.error as e:
             print(f"Cannot load image: {fullname}")
